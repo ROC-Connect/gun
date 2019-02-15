@@ -129,7 +129,10 @@ handle(Data, State=#http_state{in=body_chunked, in_state=InState,
 		{done, HasTrailers, Rest} ->
 			IsFin = case HasTrailers of
 				trailers -> nofin;
-				no_trailers -> fin
+				no_trailers -> fin;
+				_ -> 
+					io:format("Weird Trailers: ~p",[HasTrailers]),
+					fin
 			end,
 			%% I suppose it doesn't hurt to append an empty binary.
 			State1 = send_data_if_alive(<<>>, State, IsFin),
